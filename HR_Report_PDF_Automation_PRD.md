@@ -146,7 +146,7 @@ This project will streamline HR's quarterly review workflow by eliminating manua
 -   [x] **2.2 Rating row (`<RatingRow />`):** Accepts label + 1-6 rating, renders star set.
 -   [x] **2.3 Employee page (`<EmployeeReportPage />`):** Uses Tailwind for A4 sizing, margins, logo header, page number footer, and `break-after-page` utility (Tailwind v3.3) to force pagination.
 -   [x] **2.4 Print styles:** Add `@media print` in `index.css` to hide non-print UI and ensure exact dimensions.
--   [ ] **2.5 Sample story:** Add Storybook (optional) or Vite preview route to review component visually.
+-   [x] **2.5 Sample story:** Add Storybook (optional) or Vite preview route to review component visually.
 
 ### 3.0 Data Types & Validation
 

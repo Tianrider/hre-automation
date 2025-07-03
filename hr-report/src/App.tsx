@@ -1,34 +1,69 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Star } from '@/components/Star'
+import { RatingRow } from '@/components/RatingRow'
+import { EmployeeReportPage } from '@/components/EmployeeReportPage'
+import { sampleEmployee } from '@/data/sample'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [rating, setRating] = useState(3)
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="min-h-screen bg-gray-100 p-8">
+      <div className="mx-auto max-w-4xl space-y-8">
+        {/* Component Preview Section */}
+        <section className="rounded-lg bg-white p-6 shadow-lg">
+          <h2 className="mb-6 text-2xl font-bold">Component Preview</h2>
+          
+          {/* Star Component */}
+          <div className="mb-8">
+            <h3 className="mb-4 text-lg font-semibold">Star Component</h3>
+            <div className="flex gap-4">
+              <Star filled={true} size={32} />
+              <Star filled={false} size={32} />
+            </div>
+          </div>
+
+          {/* Rating Row Component */}
+          <div className="mb-8">
+            <h3 className="mb-4 text-lg font-semibold">Rating Row Component</h3>
+            <div className="w-96">
+              <RatingRow
+                label="Test Rating"
+                rating={rating}
+              />
+              <div className="mt-2">
+                <input
+                  type="range"
+                  min="0"
+                  max="6"
+                  value={rating}
+                  onChange={(e) => setRating(Number(e.target.value))}
+                  className="w-full"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Full Page Preview */}
+        <section className="rounded-lg bg-white p-6 shadow-lg">
+          <h2 className="mb-6 text-2xl font-bold">Full Page Preview</h2>
+          <p className="mb-4 text-gray-600">
+            Below is a preview of the complete employee report page. Use browser print preview
+            (Ctrl/Cmd + P) to see the exact PDF output.
+          </p>
+          <div className="scale-[0.7] origin-top-left">
+            <EmployeeReportPage
+              employee={sampleEmployee}
+              pageNumber={1}
+              totalPages={1}
+              period="2024-Q1"
+            />
+          </div>
+        </section>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
