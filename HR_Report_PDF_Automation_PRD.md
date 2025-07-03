@@ -137,7 +137,7 @@ This project will streamline HR's quarterly review workflow by eliminating manua
         add project to GitHub.
 -   [x] **1.2 Tailwind setup:** `npm i -D tailwindcss postcss autoprefixer` then `npx tailwindcss init -p`; configure `content` paths and extend colours/fonts.
 -   [x] **1.3 Linting & formatting:** Install `eslint`, `@typescript-eslint/*`, `eslint-plugin-react`, `prettier`, `eslint-config-prettier`, `eslint-plugin-tailwindcss`; add `.eslintrc.cjs` and `.prettierrc`.
--   [ ] **1.4 Commit hooks:** Configure Husky + lint-staged to run `eslint --fix` & `prettier --write` pre-commit.
+-   [x] **1.4 Commit hooks:** Configure Husky + lint-staged to run `eslint --fix` & `prettier --write` pre-commit.
 -   [ ] **1.5 Path aliases:** Update `tsconfig.json` + `vite.config.ts` to support `@/` alias.
 
 ### 2.0 UI Template & Styling
