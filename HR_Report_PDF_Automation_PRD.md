@@ -133,10 +133,10 @@ This project will streamline HR's quarterly review workflow by eliminating manua
 
 ### 1.0 Project Scaffolding & Tooling
 
--   [ ] **1.1 Init repo:** `npm create vite@latest hr-report -- --template react-ts`;
+-   [x] **1.1 Init repo:** `npm create vite@latest hr-report -- --template react-ts`;
         add project to GitHub.
--   [ ] **1.2 Tailwind setup:** `npm i -D tailwindcss postcss autoprefixer` then `npx tailwindcss init -p`; configure `content` paths and extend colours/fonts.
--   [ ] **1.3 Linting & formatting:** Install `eslint`, `@typescript-eslint/*`, `eslint-plugin-react`, `prettier`, `eslint-config-prettier`, `eslint-plugin-tailwindcss`; add `.eslintrc.cjs` and `.prettierrc`.
+-   [x] **1.2 Tailwind setup:** `npm i -D tailwindcss postcss autoprefixer` then `npx tailwindcss init -p`; configure `content` paths and extend colours/fonts.
+-   [x] **1.3 Linting & formatting:** Install `eslint`, `@typescript-eslint/*`, `eslint-plugin-react`, `prettier`, `eslint-config-prettier`, `eslint-plugin-tailwindcss`; add `.eslintrc.cjs` and `.prettierrc`.
 -   [ ] **1.4 Commit hooks:** Configure Husky + lint-staged to run `eslint --fix` & `prettier --write` pre-commit.
 -   [ ] **1.5 Path aliases:** Update `tsconfig.json` + `vite.config.ts` to support `@/` alias.
 
