@@ -52,15 +52,56 @@ export function wrapWithDocumentTemplate(html: string): string {
       .report-page {
         page-break-after: always;
       }
+      /* Remove page break after the last page */
+      .report-page:last-child {
+        page-break-after: avoid;
+      }
+    }
+    /* Base styles for consistent rendering */
+    body {
+      background: white;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    .report-page {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 15mm;
+      box-sizing: border-box;
+      background: white;
     }
   </style>
 </head>
 <body>
-  <div class="report-page">
-    ${html}
-  </div>
+  ${html}
 </body>
 </html>`;
+}
+
+/**
+ * Renders multiple employee reviews into a single HTML document
+ * @param employees Array of employee review data
+ * @param period The review period (e.g., "2024-Q1")
+ * @returns Complete HTML document string with all employee pages
+ */
+export function renderHtmlForEmployees(
+  employees: EmployeeReview[],
+  period: string
+): string {
+  const totalPages = employees.length;
+  
+  const pagesHtml = employees
+    .map((employee, index) => {
+      const pageHtml = renderEmployeePage(employee, {
+        period,
+        pageNumber: index + 1,
+        totalPages
+      });
+      
+      return `<div class="report-page">${pageHtml}</div>`;
+    })
+    .join('\n');
+
+  return wrapWithDocumentTemplate(pagesHtml);
 }
 
 /**
@@ -73,6 +114,6 @@ export function renderEmployeeDocument(
   employee: EmployeeReview,
   options: RenderOptions
 ): string {
-  const componentHtml = renderEmployeePage(employee, options);
-  return wrapWithDocumentTemplate(componentHtml);
+  const pageHtml = renderEmployeePage(employee, options);
+  return wrapWithDocumentTemplate(`<div class="report-page">${pageHtml}</div>`);
 } 
