@@ -1,6 +1,7 @@
 import { renderToString } from 'react-dom/server';
 import type { EmployeeReview } from '@/types/employee';
 import { EmployeeReportPage } from '@/components/EmployeeReportPage';
+import { getCriticalCss } from './criticalCss';
 
 interface RenderOptions {
   period: string;
@@ -34,6 +35,8 @@ export function renderEmployeePage(
  * @returns Complete HTML document string
  */
 export function wrapWithDocumentTemplate(html: string): string {
+  const criticalCss = getCriticalCss();
+  
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,34 +44,7 @@ export function wrapWithDocumentTemplate(html: string): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Employee Review Report</title>
   <style>
-    @page {
-      size: A4;
-      margin: 15mm;
-    }
-    @media print {
-      body {
-        margin: 0;
-      }
-      .report-page {
-        page-break-after: always;
-      }
-      /* Remove page break after the last page */
-      .report-page:last-child {
-        page-break-after: avoid;
-      }
-    }
-    /* Base styles for consistent rendering */
-    body {
-      background: white;
-      font-family: system-ui, -apple-system, sans-serif;
-    }
-    .report-page {
-      width: 210mm;
-      min-height: 297mm;
-      padding: 15mm;
-      box-sizing: border-box;
-      background: white;
-    }
+    ${criticalCss}
   </style>
 </head>
 <body>

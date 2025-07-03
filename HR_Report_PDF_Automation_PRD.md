@@ -158,7 +158,7 @@ This project will streamline HR's quarterly review workflow by eliminating manua
 
 -   [x] **4.1 Install `react-dom/server`** and helper to render `<EmployeeReportPage />` to static markup.
 -   [x] **4.2 Build `renderHtmlForEmployees()`** utility that wraps each rendered page in `<div class="report-page">` and inserts class `break-after-page`.
--   [ ] **4.3 Inline Tailwind styles for print** using `@tailwindcss/typography` plugin or `@mui/tailwindcss-ssr` if needed to capture critical CSS.
+-   [x] **4.3 Inline Tailwind styles for print** using `@tailwindcss/typography` plugin or `@mui/tailwindcss-ssr` if needed to capture critical CSS.
 
 ### 5.0 CLI Tool (`scripts/generate.ts`)
 
