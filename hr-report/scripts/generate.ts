@@ -3,11 +3,19 @@
 const { Command } = require('commander');
 const path = require('path');
 const fs = require('fs');
+const { validateEmployeeReviewsSafe } = require('../src/utils/validation');
 
 interface CLIOptions {
   input: string;
   period: string;
   out: string;
+}
+
+function formatZodError(error: any): string {
+  return error.issues.map((issue: any) => {
+    const path = issue.path.length > 0 ? `at ${issue.path.join('.')}` : '';
+    return `- ${issue.message} ${path}`;
+  }).join('\n');
 }
 
 const program = new Command();
@@ -27,13 +35,34 @@ program
         process.exit(1);
       }
 
+      // Read and parse JSON file
+      const jsonContent = fs.readFileSync(options.input, 'utf-8');
+      let inputData;
+      try {
+        inputData = JSON.parse(jsonContent);
+      } catch (error) {
+        console.error('Error: Invalid JSON file format');
+        console.error(error instanceof Error ? error.message : String(error));
+        process.exit(1);
+      }
+
+      // Validate employee reviews data
+      const validationResult = validateEmployeeReviewsSafe(inputData);
+      if (!validationResult.success) {
+        console.error('Error: Invalid employee reviews data');
+        console.error('Validation errors:');
+        console.error(formatZodError(validationResult.errors));
+        process.exit(1);
+      }
+
       // Validate and create output directory if it doesn't exist
       const outDir = path.resolve(options.out);
       if (!fs.existsSync(outDir)) {
         fs.mkdirSync(outDir, { recursive: true });
       }
 
-      // TODO: Implement report generation logic in future tasks
+      // Log success and validated data
+      console.log(`Successfully validated ${validationResult.data.length} employee reviews`);
       console.log('CLI Options:', {
         input: path.resolve(options.input),
         period: options.period,

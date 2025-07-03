@@ -1,0 +1,33 @@
+[
+  {
+    "name": "John Doe",
+    "ratings": {
+      "tanggungJawab": 4,
+      "kerjaSama": 5,
+      "komunikasi": 4,
+      "pekaDanInisiatif": 4,
+      "kedekatan": 3,
+      "profesional": 5
+    },
+    "comment": [
+      "John consistently shows great responsibility and teamwork.",
+      "Always willing to help others when needed."
+    ]
+  },
+  {
+    "name": "Jane Smith",
+    "ratings": {
+      "tanggungJawab": 6,
+      "kerjaSama": 5,
+      "komunikasi": 5,
+      "pekaDanInisiatif": 6,
+      "kedekatan": 4,
+      "profesional": 6
+    },
+    "comment": [
+      "Excellent leadership skills",
+      "Great at mentoring junior team members",
+      "Takes initiative in challenging situations"
+    ]
+  }
+] 

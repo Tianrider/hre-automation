@@ -163,7 +163,7 @@ This project will streamline HR's quarterly review workflow by eliminating manua
 ### 5.0 CLI Tool (`scripts/generate.ts`)
 
 -   [x] **5.1 Parse CLI flags** with `commander`: `--input`, `--period`, `--out`.
--   [ ] **5.2 Read & validate JSON** via Zod; show pretty error list on failure.
+-   [x] **5.2 Read & validate JSON** via Zod; show pretty error list on failure.
 -   [ ] **5.3 Call HTML renderer** and save intermediate HTML file for debug (`reports/debug.html`).
 
 ### 6.0 PDF Export & ZIP Packaging
