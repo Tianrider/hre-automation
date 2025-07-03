@@ -156,7 +156,7 @@ This project will streamline HR's quarterly review workflow by eliminating manua
 
 ### 4.0 Server-Side HTML Rendering
 
--   [ ] **4.1 Install `react-dom/server`** and helper to render `<EmployeeReportPage />` to static markup.
+-   [x] **4.1 Install `react-dom/server`** and helper to render `<EmployeeReportPage />` to static markup.
 -   [ ] **4.2 Build `renderHtmlForEmployees()`** utility that wraps each rendered page in `<div class="report-page">` and inserts class `break-after-page`.
 -   [ ] **4.3 Inline Tailwind styles for print** using `@tailwindcss/typography` plugin or `@mui/tailwindcss-ssr` if needed to capture critical CSS.
 
