@@ -150,8 +150,8 @@ This project will streamline HR's quarterly review workflow by eliminating manua
 
 ### 3.0 Data Types & Validation
 
--   [ ] **3.1 Define `EmployeeReview` TypeScript interface** in `src/types.d.ts`.
--   [ ] **3.2 Implement Zod schema** (`utils/validation.ts`) for runtime validation and convert to TS type via `zod`.
+-   [x] **3.1 Define `EmployeeReview` TypeScript interface** in `src/types.d.ts`.
+-   [x] **3.2 Implement Zod schema** (`utils/validation.ts`) for runtime validation and convert to TS type via `zod`.
 -   [ ] **3.3 Write unit tests** to verify invalid payloads are rejected.
 
 ### 4.0 Server-Side HTML Rendering
