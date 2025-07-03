@@ -13,7 +13,7 @@
     "prepare": "husky",
     "test": "jest",
     "test:watch": "jest --watch",
-    "generate": "ts-node -P tsconfig.scripts.json scripts/generate.ts"
+    "generate": "NODE_PATH=./src ts-node -P tsconfig.scripts.json scripts/generate.ts"
   },
   "dependencies": {
     "commander": "^13.1.0",

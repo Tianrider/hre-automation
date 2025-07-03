@@ -1,5 +1,6 @@
-import { RatingRow } from '@/components/RatingRow';
-import type { EmployeeReview } from '@/types/employee';
+import React from 'react';
+import { RatingRow } from './RatingRow';
+import type { EmployeeReview } from '../types/employee';
 
 interface EmployeeReportPageProps {
   employee: EmployeeReview;
@@ -17,12 +18,12 @@ const RATING_LABELS = {
   profesional: 'Profesional',
 } as const;
 
-export const EmployeeReportPage = ({
+export const EmployeeReportPage: React.FC<EmployeeReportPageProps> = ({
   employee,
   pageNumber,
   totalPages,
   period,
-}: EmployeeReportPageProps) => {
+}) => {
   return (
     <div className="report-page min-h-[297mm] w-[210mm] break-after-page bg-white px-[15mm] py-[15mm] text-black">
       {/* Header with Logo */}

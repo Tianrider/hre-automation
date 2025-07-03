@@ -3,7 +3,13 @@
 const { Command } = require('commander');
 const path = require('path');
 const fs = require('fs');
-const { validateEmployeeReviewsSafe } = require('../src/utils/validation');
+
+// Get the absolute path to src directory
+const srcDir = path.resolve(__dirname, '../src');
+
+// Import our modules using absolute paths
+const { validateEmployeeReviewsSafe } = require(path.join(srcDir, 'utils/validation'));
+const { renderHtmlForEmployees } = require(path.join(srcDir, 'utils/serverRenderer'));
 
 interface CLIOptions {
   input: string;
@@ -61,8 +67,16 @@ program
         fs.mkdirSync(outDir, { recursive: true });
       }
 
-      // Log success and validated data
+      // Generate HTML for all employees
+      const html = renderHtmlForEmployees(validationResult.data, options.period);
+
+      // Save debug HTML file
+      const debugHtmlPath = path.join(outDir, 'debug.html');
+      fs.writeFileSync(debugHtmlPath, html, 'utf-8');
+
+      // Log success
       console.log(`Successfully validated ${validationResult.data.length} employee reviews`);
+      console.log('Generated debug HTML file:', debugHtmlPath);
       console.log('CLI Options:', {
         input: path.resolve(options.input),
         period: options.period,

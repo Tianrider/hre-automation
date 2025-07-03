@@ -1,4 +1,5 @@
-import { Star } from '@/components/Star';
+import React from 'react';
+import { Star } from './Star';
 
 interface RatingRowProps {
   label: string;
@@ -6,7 +7,7 @@ interface RatingRowProps {
   maxRating?: number;
 }
 
-export const RatingRow = ({ label, rating, maxRating = 6 }: RatingRowProps) => {
+export const RatingRow: React.FC<RatingRowProps> = ({ label, rating, maxRating = 6 }) => {
   return (
     <div className="flex items-center justify-between py-2">
       <span className="font-medium text-gray-700">{label}</span>
