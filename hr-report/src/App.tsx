@@ -5,8 +5,6 @@ import { EmployeeReportPage } from '@/components/EmployeeReportPage'
 import { sampleEmployee } from '@/data/sample'
 import './App.css'
 import { validateEmployeeReviewsSafe } from '@/utils/validation'
-import JSZip from 'jszip';
-import { saveAs } from 'file-saver';
 
 function App() {
   const [rating, setRating] = useState(3)
@@ -210,11 +208,3 @@ function App() {
 }
 
 export default App
-
-// Add a simple slugify function
-function slugify(str: string): string {
-  return str
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)+/g, '');
-}
