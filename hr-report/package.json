@@ -13,7 +13,8 @@
     "prepare": "husky",
     "test": "jest",
     "test:watch": "jest --watch",
-    "generate": "NODE_PATH=./src ts-node -P tsconfig.scripts.json scripts/generate.ts"
+    "generate": "NODE_PATH=./src ts-node -P tsconfig.scripts.json scripts/generate.ts",
+    "release": "semantic-release"
   },
   "dependencies": {
     "commander": "^13.1.0",
@@ -44,5 +45,19 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
     "vite": "^5.1.4"
+  },
+  "release": {
+    "branches": ["main"],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/github",
+      ["@semantic-release/git", {
+        "assets": ["CHANGELOG.md", "package.json"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }]
+    ]
   }
 }
