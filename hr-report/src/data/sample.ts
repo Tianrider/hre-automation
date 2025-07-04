@@ -16,4 +16,5 @@ export const sampleEmployee: EmployeeReview = {
     'Good communication skills but can improve in formal settings',
     'Takes initiative in most situations',
   ],
+  finalRating: 4.17,
 }; 
