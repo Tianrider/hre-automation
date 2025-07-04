@@ -183,7 +183,7 @@ This project will streamline HR's quarterly review workflow by eliminating manua
 
 -   [x] **8.1 Unit tests**: slugify, star component renders correct number of stars.
 -   [x] **8.2 Integration test**: run full CLI on sample `input.json`, assert ZIP exists & contains correct file count.
--   [ ] **8.3 Visual regression**: Generate PDF, rasterise first page (Ghostscript or pdf-to-png) and compare with baseline using `pixelmatch`.
+-   [x] **8.3 Visual regression**: Generate PDF, rasterise first page (Ghostscript or pdf-to-png) and compare with baseline using `pixelmatch`.
 
 ### 9.0 Continuous Integration (GitHub Actions)
 
