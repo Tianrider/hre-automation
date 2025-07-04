@@ -3,7 +3,6 @@ import type { EmployeeReview, Rating } from '../types/employee';
 
 // Schema for individual ratings (1-6)
 const ratingSchema = z.number()
-  .int()
   .min(1, "Rating must be at least 1")
   .max(6, "Rating must not exceed 6")
   .refine((n): n is Rating => n >= 1 && n <= 6, {
