@@ -85,10 +85,10 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-screen bg-gray-100 p-8 text-gray-900">
       <div className="mx-auto max-w-4xl space-y-8">
         {/* Minimal Web UI Section */}
-        <section className="rounded-lg bg-white p-6 shadow-lg">
+        <section className="rounded-lg bg-white p-6 shadow-lg text-gray-900">
           <h2 className="mb-6 text-2xl font-bold">Generate HR Reports (Web UI)</h2>
           <div className="mb-4">
             <label className="block mb-2 font-semibold">Paste JSON or upload file:</label>
@@ -139,7 +139,7 @@ function App() {
         </section>
 
         {/* Component Preview Section */}
-        <section className="rounded-lg bg-white p-6 shadow-lg">
+        <section className="rounded-lg bg-white p-6 shadow-lg text-gray-900">
           <h2 className="mb-6 text-2xl font-bold">Component Preview</h2>
           
           {/* Star Component */}
@@ -174,7 +174,7 @@ function App() {
         </section>
 
         {/* Full Page Preview */}
-        <section className="rounded-lg bg-white p-6 shadow-lg">
+        <section className="rounded-lg bg-white p-6 shadow-lg text-gray-900">
           <h2 className="mb-6 text-2xl font-bold">Full Page Preview</h2>
           <p className="mb-4 text-gray-600">
             Below is a preview of the complete employee report page. Use browser print preview
