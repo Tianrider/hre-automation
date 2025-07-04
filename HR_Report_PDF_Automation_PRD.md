@@ -170,7 +170,7 @@ This project will streamline HR's quarterly review workflow by eliminating manua
 
 -   [x] **6.1 Install Puppeteer** and launch with `--no-sandbox` for CI compatibility.
 -   [x] **6.2 Loop employees**: `page.setContent(html)`; `page.pdf({ format: 'A4', printBackground: true })`.
--   [ ] **6.3 Filename convention**: kebab-case employee name + period.
+-   [x] **6.3 Filename convention**: kebab-case employee name + period.
 -   [ ] **6.4 Use `archiver`** to stream all PDFs into `hr-reports_<period>.zip`.
 
 ### 7.0 Web UI (Optional but recommended)
