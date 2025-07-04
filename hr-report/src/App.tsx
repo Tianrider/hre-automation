@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Star } from '@/components/Star'
 import { RatingRow } from '@/components/RatingRow'
 import { EmployeeReportPage } from '@/components/EmployeeReportPage'
@@ -14,7 +14,7 @@ function App() {
   const [period, setPeriod] = useState('2024-Q2');
   const [status, setStatus] = useState('');
   const [dragActive, setDragActive] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [employeeData, setEmployeeData] = useState<any[]>([]);
   const dropRef = useRef<HTMLDivElement>(null);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,44 +51,38 @@ function App() {
     }
   };
 
-  const handleGenerate = async () => {
+  const handleGenerate = () => {
     let data;
     try {
       data = JSON.parse(jsonInput);
     } catch (err) {
       setStatus('Invalid JSON format.');
+      setEmployeeData([]);
       return;
     }
     const result = validateEmployeeReviewsSafe(data);
     if (!result.success) {
       setStatus('Validation failed: ' + JSON.stringify(result.errors));
+      setEmployeeData([]);
     } else {
-      setStatus(`Valid! ${result.data.length} employee reviews loaded. Generating ZIP...`);
-      setProgress(0);
-      // Simulate progress for demo
-      for (let i = 1; i <= 10; i++) {
-        await new Promise(res => setTimeout(res, 60));
-        setProgress(i * 10);
-      }
-      // --- ZIP GENERATION DEMO ---
-      const zip = new JSZip();
-      for (const employee of result.data) {
-        const filename = `${slugify(employee.name)}_${period}.pdf`;
-        zip.file(filename, `This would be the PDF for ${employee.name}`);
-      }
-      const content = await zip.generateAsync({ type: 'blob' });
-      saveAs(content, `hr-reports_${period}.zip`);
-      setStatus(`ZIP generated and download triggered for ${result.data.length} employees.`);
-      setProgress(100);
-      setTimeout(() => setProgress(0), 1000);
+      setStatus(`Valid! ${result.data.length} employee reviews loaded. Ready to print.`);
+      setEmployeeData(result.data);
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 p-8 text-gray-900">
+      {/* Print styles for page breaks and hiding UI controls */}
+      <style>{`
+        @media print {
+          .no-print { display: none !important; }
+          .report-page { page-break-after: always; break-after: page; }
+          body { background: white !important; }
+        }
+      `}</style>
       <div className="mx-auto max-w-4xl space-y-8">
         {/* Minimal Web UI Section */}
-        <section className="rounded-lg bg-white p-6 shadow-lg text-gray-900">
+        <section className="rounded-lg bg-white p-6 shadow-lg text-gray-900 no-print">
           <h2 className="mb-6 text-2xl font-bold">Generate HR Reports (Web UI)</h2>
           <div className="mb-4">
             <label className="block mb-2 font-semibold">Paste JSON or upload file:</label>
@@ -125,18 +119,39 @@ function App() {
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
             onClick={handleGenerate}
           >
-            Generate Report
+            Render Reports
           </button>
-          {progress > 0 && (
-            <div className="mt-4 w-full bg-gray-200 rounded h-4 overflow-hidden">
-              <div
-                className="bg-blue-500 h-4 transition-all"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          )}
           {status && <div className="mt-4 text-sm text-gray-700">{status}</div>}
         </section>
+
+        {/* Print Button (only shown if data is loaded) */}
+        {employeeData.length > 0 && (
+          <div className="no-print mb-4">
+            <button
+              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+              onClick={() => window.print()}
+            >
+              Print or Save as PDF
+            </button>
+            <span className="ml-4 text-gray-600">Use your browser's print dialog to save as PDF.</span>
+          </div>
+        )}
+
+        {/* Render all employee reports for printing */}
+        {employeeData.length > 0 && (
+          <div>
+            {employeeData.map((employee, idx) => (
+              <div className="report-page" key={employee.name + idx}>
+                <EmployeeReportPage
+                  employee={employee}
+                  pageNumber={idx + 1}
+                  totalPages={employeeData.length}
+                  period={period}
+                />
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Component Preview Section */}
         <section className="rounded-lg bg-white p-6 shadow-lg text-gray-900">

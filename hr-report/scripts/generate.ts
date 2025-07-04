@@ -145,4 +145,78 @@ function slugify(str) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)+/g, '');
-} 
+}
+
+/**
+ * Generates PDFs for each employee and returns a Promise that resolves to the ZIP file path.
+ * Used by both CLI and backend API.
+ */
+async function generateReportsZip({ inputData, period, outDir }: { inputData: any, period: string, outDir: string }) {
+  // Validate employee reviews data
+  const validationResult = validateEmployeeReviewsSafe(inputData);
+  if (!validationResult.success) {
+    const error = new Error('Validation failed: ' + formatZodError(validationResult.errors));
+    // @ts-ignore
+    error.validation = validationResult.errors;
+    throw error;
+  }
+
+  // Validate and create output directory if it doesn't exist
+  if (!fs.existsSync(outDir)) {
+    fs.mkdirSync(outDir, { recursive: true });
+  }
+
+  // Generate HTML for all employees
+  const html = renderHtmlForEmployees(validationResult.data, period);
+
+  // Save debug HTML file
+  const debugHtmlPath = path.join(outDir, 'debug.html');
+  fs.writeFileSync(debugHtmlPath, html, 'utf-8');
+
+  // --- PDF GENERATION START ---
+  const employees = validationResult.data;
+  const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+  for (const employee of employees) {
+    const employeeHtml = renderEmployeeDocument(employee, { period });
+    const page = await browser.newPage();
+    await page.setContent(employeeHtml, { waitUntil: 'networkidle0' });
+    const filename = `${slugify(employee.name)}_${period}.pdf`;
+    const pdfPath = path.join(outDir, filename);
+    await page.pdf({ path: pdfPath, format: 'A4', printBackground: true });
+    await page.close();
+  }
+  await browser.close();
+  // --- PDF GENERATION END ---
+
+  // --- ZIP PACKAGING START ---
+  const zipFilename = `hr-reports_${period}.zip`;
+  const zipPath = path.join(outDir, zipFilename);
+  const output = fs.createWriteStream(zipPath);
+  const archive = archiver('zip', { zlib: { level: 9 } });
+
+  const closePromise = new Promise<void>((resolve, reject) => {
+    output.on('close', function () {
+      // Clean up individual PDFs after zipping
+      fs.readdirSync(outDir)
+        .filter(f => f.endsWith('.pdf') && f.includes(`_${period}.pdf`))
+        .forEach(f => fs.unlinkSync(path.join(outDir, f)));
+      resolve();
+    });
+    archive.on('error', function(err){ reject(err); });
+  });
+
+  archive.pipe(output);
+  // Add all PDFs for this period
+  fs.readdirSync(outDir)
+    .filter(f => f.endsWith('.pdf') && f.includes(`_${period}.pdf`))
+    .forEach(f => {
+      archive.file(path.join(outDir, f), { name: f });
+    });
+  await archive.finalize();
+  await closePromise;
+  // --- ZIP PACKAGING END ---
+
+  return zipPath;
+}
+
+module.exports.generateReportsZip = generateReportsZip; 
