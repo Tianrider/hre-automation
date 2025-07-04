@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Star } from '@/components/Star'
 import { RatingRow } from '@/components/RatingRow'
 import { EmployeeReportPage } from '@/components/EmployeeReportPage'
@@ -13,6 +13,9 @@ function App() {
   const [jsonInput, setJsonInput] = useState('');
   const [period, setPeriod] = useState('2024-Q2');
   const [status, setStatus] = useState('');
+  const [dragActive, setDragActive] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const dropRef = useRef<HTMLDivElement>(null);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -22,6 +25,30 @@ function App() {
       setJsonInput(event.target?.result as string || '');
     };
     reader.readAsText(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(true);
+  };
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+  };
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type === 'application/json') {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setJsonInput(event.target?.result as string || '');
+      };
+      reader.readAsText(file);
+    }
   };
 
   const handleGenerate = async () => {
@@ -37,16 +64,23 @@ function App() {
       setStatus('Validation failed: ' + JSON.stringify(result.errors));
     } else {
       setStatus(`Valid! ${result.data.length} employee reviews loaded. Generating ZIP...`);
+      setProgress(0);
+      // Simulate progress for demo
+      for (let i = 1; i <= 10; i++) {
+        await new Promise(res => setTimeout(res, 60));
+        setProgress(i * 10);
+      }
       // --- ZIP GENERATION DEMO ---
       const zip = new JSZip();
       for (const employee of result.data) {
         const filename = `${slugify(employee.name)}_${period}.pdf`;
-        // For demo, just add a dummy text file. Replace with PDF bytes in real implementation.
         zip.file(filename, `This would be the PDF for ${employee.name}`);
       }
       const content = await zip.generateAsync({ type: 'blob' });
       saveAs(content, `hr-reports_${period}.zip`);
       setStatus(`ZIP generated and download triggered for ${result.data.length} employees.`);
+      setProgress(100);
+      setTimeout(() => setProgress(0), 1000);
     }
   };
 
@@ -58,6 +92,16 @@ function App() {
           <h2 className="mb-6 text-2xl font-bold">Generate HR Reports (Web UI)</h2>
           <div className="mb-4">
             <label className="block mb-2 font-semibold">Paste JSON or upload file:</label>
+            <div
+              ref={dropRef}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              className={`w-full border-2 ${dragActive ? 'border-blue-500 bg-blue-50' : 'border-dashed border-gray-300'} rounded p-4 mb-2 text-center cursor-pointer transition-colors`}
+              style={{ minHeight: 80 }}
+            >
+              {dragActive ? 'Drop your JSON file here...' : 'Drag & drop JSON file here, or use the controls below.'}
+            </div>
             <textarea
               className="w-full border rounded p-2 mb-2"
               rows={6}
@@ -83,6 +127,14 @@ function App() {
           >
             Generate Report
           </button>
+          {progress > 0 && (
+            <div className="mt-4 w-full bg-gray-200 rounded h-4 overflow-hidden">
+              <div
+                className="bg-blue-500 h-4 transition-all"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          )}
           {status && <div className="mt-4 text-sm text-gray-700">{status}</div>}
         </section>
 
