@@ -25,12 +25,3 @@ export const ratingLabels: Record<keyof EmployeeRatings, string> = {
   kedekatan: "Kedekatan",
   profesional: "Profesional"
 }; 
-
-export const sampleEmployees = [
-  {
-    name: "John Doe",
-    ratings: { tanggungJawab: 4, kerjaSama: 5, ... },
-    comment: ["Great job!"],
-    finalRating: 4.5
-  }
-]; 
