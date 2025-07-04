@@ -79,11 +79,12 @@ function App() {
     container.style.position = 'absolute';
     container.style.left = '-9999px';
     container.style.top = '0';
-    container.style.width = '210mm';
-    container.style.height = '297mm';
+    container.style.width = '794px'; // A4 width in pixels (210mm = 794px at 96 DPI)
+    container.style.height = '1123px'; // A4 height in pixels (297mm = 1123px at 96 DPI)
     container.style.backgroundColor = 'white';
-    container.style.padding = '15mm';
+    container.style.padding = '57px'; // 15mm = 57px at 96 DPI
     container.style.boxSizing = 'border-box';
+    container.style.fontSize = '14px'; // Set base font size
     document.body.appendChild(container);
 
     // Render the employee report
@@ -98,16 +99,17 @@ function App() {
     );
 
     // Wait for rendering to complete
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 200));
 
-    // Convert to canvas
+    // Convert to canvas with reduced scale
     const canvas = await html2canvas(container, {
-      scale: 2,
+      scale: 1, // Reduced from 2 to 1
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#ffffff',
-      width: 210 * 2.83465, // A4 width in pixels (210mm)
-      height: 297 * 2.83465, // A4 height in pixels (297mm)
+      width: 794, // A4 width in pixels
+      height: 1123, // A4 height in pixels
+      logging: false,
     });
 
     // Clean up
