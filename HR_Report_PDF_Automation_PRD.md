@@ -187,7 +187,7 @@ This project will streamline HR's quarterly review workflow by eliminating manua
 
 ### 9.0 Continuous Integration (GitHub Actions)
 
--   [ ] **9.1 Workflow**: install deps, run `npm run lint`, `npm test`, execute sample generation (Puppeteer headless) and upload ZIP as artefact.
+-   [x] **9.1 Workflow**: install deps, run `npm run lint`, `npm test`, execute sample generation (Puppeteer headless) and upload ZIP as artefact.
 -   [ ] **9.2 Cache node_modules** with `actions/cache`.
 -   [ ] **9.3 Dependabot** for monthly dependency bumps.
 
