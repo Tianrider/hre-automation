@@ -46,8 +46,9 @@ export const RatingRow: React.FC<RatingRowProps> = ({ label, rating, maxRating =
   return (
     <div className="flex items-center justify-between py-2">
       <span className="font-medium text-gray-700">{label}</span>
-      <div className="flex gap-1">
-        {stars}
+      <div className="flex items-center gap-2">
+        <div className="flex gap-1">{stars}</div>
+        <span className="ml-2 text-gray-700 font-mono text-base min-w-[2.5rem] text-right">{rating.toFixed(2)}</span>
       </div>
     </div>
   );

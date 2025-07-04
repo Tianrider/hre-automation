@@ -13,6 +13,7 @@ export interface EmployeeReview {
   name: string;
   ratings: EmployeeRatings;
   comment: string[];
+  finalRating: number;
 }
 
 // Label mapping for display purposes

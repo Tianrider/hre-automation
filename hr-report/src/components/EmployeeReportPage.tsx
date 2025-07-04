@@ -59,6 +59,13 @@ export const EmployeeReportPage: React.FC<EmployeeReportPageProps> = ({
         </ul>
       </div>
 
+      {/* Final Rating - Big Number */}
+      <div className="w-full flex justify-center items-center mb-8">
+        <div className="text-6xl font-extrabold text-yellow-500 drop-shadow-lg">
+          {employee.finalRating.toFixed(2)}
+        </div>
+      </div>
+
       {/* Footer with Page Number */}
       <footer className="absolute bottom-[15mm] right-[15mm] text-sm text-gray-500">
         Page {pageNumber} of {totalPages}
