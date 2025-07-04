@@ -79,10 +79,10 @@ function App() {
     container.style.position = 'absolute';
     container.style.left = '-9999px';
     container.style.top = '0';
-    container.style.width = '794px'; // A4 width in pixels (210mm = 794px at 96 DPI)
+    container.style.width = '1000px'; // Increased width for better centering
     container.style.height = '1123px'; // A4 height in pixels (297mm = 1123px at 96 DPI)
     container.style.backgroundColor = 'white';
-    container.style.padding = '57px'; // 15mm = 57px at 96 DPI
+    container.style.padding = '57px 103px'; // 15mm top/bottom, 25mm left/right for centering
     container.style.boxSizing = 'border-box';
     container.style.fontSize = '14px'; // Set base font size
     document.body.appendChild(container);
@@ -107,7 +107,7 @@ function App() {
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#ffffff',
-      width: 794, // A4 width in pixels
+      width: 1000, // Increased width
       height: 1123, // A4 height in pixels
       logging: false,
     });

@@ -65,11 +65,6 @@ export const EmployeeReportPage: React.FC<EmployeeReportPageProps> = ({
           {employee.finalRating.toFixed(2)}
         </div>
       </div>
-
-      {/* Footer with Page Number */}
-      <footer className="absolute bottom-[15mm] right-[15mm] text-sm text-gray-500">
-        Page {pageNumber} of {totalPages}
-      </footer>
     </div>
   );
 }; 
