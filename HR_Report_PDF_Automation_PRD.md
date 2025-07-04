@@ -164,11 +164,11 @@ This project will streamline HR's quarterly review workflow by eliminating manua
 
 -   [x] **5.1 Parse CLI flags** with `commander`: `--input`, `--period`, `--out`.
 -   [x] **5.2 Read & validate JSON** via Zod; show pretty error list on failure.
--   [ ] **5.3 Call HTML renderer** and save intermediate HTML file for debug (`reports/debug.html`).
+-   [x] **5.3 Call HTML renderer** and save intermediate HTML file for debug (`reports/debug.html`).
 
 ### 6.0 PDF Export & ZIP Packaging
 
--   [ ] **6.1 Install Puppeteer** and launch with `--no-sandbox` for CI compatibility.
+-   [x] **6.1 Install Puppeteer** and launch with `--no-sandbox` for CI compatibility.
 -   [ ] **6.2 Loop employees**: `page.setContent(html)`; `page.pdf({ format: 'A4', printBackground: true })`.
 -   [ ] **6.3 Filename convention**: kebab-case employee name + period.
 -   [ ] **6.4 Use `archiver`** to stream all PDFs into `hr-reports_<period>.zip`.

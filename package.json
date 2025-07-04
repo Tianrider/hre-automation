@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "zod": "^3.25.71"
+  },
+  "devDependencies": {
+    "puppeteer": "^24.11.2"
   }
 }
