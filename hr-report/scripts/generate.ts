@@ -99,14 +99,18 @@ program
       const output = fs.createWriteStream(zipPath);
       const archive = archiver('zip', { zlib: { level: 9 } });
 
-      output.on('close', function () {
-        console.log(`Created ZIP archive: ${zipPath} (${archive.pointer()} total bytes)`);
-        // Optionally, clean up individual PDFs after zipping
-        fs.readdirSync(outDir)
-          .filter(f => f.endsWith('.pdf') && f.includes(`_${period}.pdf`))
-          .forEach(f => fs.unlinkSync(path.join(outDir, f)));
+      const closePromise: Promise<void> = new Promise((resolve, reject) => {
+        output.on('close', function () {
+          console.log(`Created ZIP archive: ${zipPath} (${archive.pointer()} total bytes)`);
+          // Optionally, clean up individual PDFs after zipping
+          fs.readdirSync(outDir)
+            .filter(f => f.endsWith('.pdf') && f.includes(`_${period}.pdf`))
+            .forEach(f => fs.unlinkSync(path.join(outDir, f)));
+          resolve();
+        });
+        archive.on('error', function(err){ reject(err); });
       });
-      archive.on('error', function(err){ throw err; });
+
       archive.pipe(output);
       // Add all PDFs for this period
       fs.readdirSync(outDir)
@@ -115,6 +119,7 @@ program
           archive.file(path.join(outDir, f), { name: f });
         });
       await archive.finalize();
+      await closePromise;
       // --- ZIP PACKAGING END ---
 
       // Log success
