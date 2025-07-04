@@ -5,6 +5,10 @@ import { EmployeeReportPage } from '@/components/EmployeeReportPage'
 import { sampleEmployee } from '@/data/sample'
 import './App.css'
 import { validateEmployeeReviewsSafe } from '@/utils/validation'
+import JSZip from 'jszip'
+import { jsPDF } from 'jspdf'
+import html2canvas from 'html2canvas'
+import { createRoot } from 'react-dom/client'
 
 function App() {
   const [rating, setRating] = useState(3)
@@ -13,6 +17,7 @@ function App() {
   const [status, setStatus] = useState('');
   const [dragActive, setDragActive] = useState(false);
   const [employeeData, setEmployeeData] = useState<any[]>([]);
+  const [isGenerating, setIsGenerating] = useState(false);
   const dropRef = useRef<HTMLDivElement>(null);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,8 +68,100 @@ function App() {
       setStatus('Validation failed: ' + JSON.stringify(result.errors));
       setEmployeeData([]);
     } else {
-      setStatus(`Valid! ${result.data.length} employee reviews loaded. Ready to print.`);
+      setStatus(`Valid! ${result.data.length} employee reviews loaded. Ready to print or export.`);
       setEmployeeData(result.data);
+    }
+  };
+
+  const generatePDF = async (employee: any, index: number): Promise<Blob> => {
+    // Create a temporary container for the employee report
+    const container = document.createElement('div');
+    container.style.position = 'absolute';
+    container.style.left = '-9999px';
+    container.style.top = '0';
+    container.style.width = '210mm';
+    container.style.height = '297mm';
+    container.style.backgroundColor = 'white';
+    container.style.padding = '15mm';
+    container.style.boxSizing = 'border-box';
+    document.body.appendChild(container);
+
+    // Render the employee report
+    const root = createRoot(container);
+    root.render(
+      <EmployeeReportPage
+        employee={employee}
+        pageNumber={index + 1}
+        totalPages={employeeData.length}
+        period={period}
+      />
+    );
+
+    // Wait for rendering to complete
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    // Convert to canvas
+    const canvas = await html2canvas(container, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff',
+      width: 210 * 2.83465, // A4 width in pixels (210mm)
+      height: 297 * 2.83465, // A4 height in pixels (297mm)
+    });
+
+    // Clean up
+    document.body.removeChild(container);
+    root.unmount();
+
+    // Convert canvas to PDF
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
+
+    return pdf.output('blob');
+  };
+
+  const handleExportZIP = async () => {
+    if (employeeData.length === 0) {
+      setStatus('No employee data to export.');
+      return;
+    }
+
+    setIsGenerating(true);
+    setStatus('Generating PDFs and creating ZIP file...');
+
+    try {
+      const zip = new JSZip();
+      
+      // Generate PDF for each employee
+      for (let i = 0; i < employeeData.length; i++) {
+        const employee = employeeData[i];
+        setStatus(`Generating PDF ${i + 1} of ${employeeData.length}: ${employee.name}`);
+        
+        const pdfBlob = await generatePDF(employee, i);
+        const filename = `${slugify(employee.name)}_${period}.pdf`;
+        zip.file(filename, pdfBlob);
+      }
+
+      // Generate and download ZIP
+      setStatus('Creating ZIP file...');
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      
+      const url = window.URL.createObjectURL(zipBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `hr-reports_${period}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+
+      setStatus(`Successfully exported ${employeeData.length} employee reports as ZIP file.`);
+    } catch (error) {
+      setStatus('Error generating ZIP: ' + (error instanceof Error ? error.message : String(error)));
+    } finally {
+      setIsGenerating(false);
     }
   };
 
@@ -122,16 +219,25 @@ function App() {
           {status && <div className="mt-4 text-sm text-gray-700">{status}</div>}
         </section>
 
-        {/* Print Button (only shown if data is loaded) */}
+        {/* Export Buttons (only shown if data is loaded) */}
         {employeeData.length > 0 && (
-          <div className="no-print mb-4">
+          <div className="no-print mb-4 flex gap-4">
             <button
               className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
               onClick={() => window.print()}
             >
               Print or Save as PDF
             </button>
-            <span className="ml-4 text-gray-600">Use your browser's print dialog to save as PDF.</span>
+            <button
+              className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 disabled:opacity-50"
+              onClick={handleExportZIP}
+              disabled={isGenerating}
+            >
+              {isGenerating ? 'Generating ZIP...' : 'Export All as ZIP'}
+            </button>
+            <span className="ml-4 text-gray-600 self-center">
+              {isGenerating ? 'Please wait...' : 'Download all employee reports as individual PDFs in a ZIP file.'}
+            </span>
           </div>
         )}
 
@@ -208,3 +314,11 @@ function App() {
 }
 
 export default App
+
+// Add a simple slugify function
+function slugify(str: string): string {
+  return str
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)+/g, '');
+}
