@@ -36,4 +36,14 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: hr-reports-2024-Q2
-          path: hr-report/reports/hr-reports_2024-Q2.zip 
+          path: hr-report/reports/hr-reports_2024-Q2.zip
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            hr-report/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node- 
