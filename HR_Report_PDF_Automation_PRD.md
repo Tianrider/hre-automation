@@ -193,6 +193,6 @@ This project will streamline HR's quarterly review workflow by eliminating manua
 
 ### 10.0 Documentation & Samples
 
--   [ ] **10.1 README.md**: installation, CLI/web usage examples, architecture diagram.
+-   [x] **10.1 README.md**: installation, CLI/web usage examples, architecture diagram.
 -   [ ] **10.2 Sample data**: `examples/sample-reviews.json` with 3-5 employees.
 -   [ ] **10.3 Changelog & versioning**: follow Conventional Commits; automate release notes with `semantic-release`.
