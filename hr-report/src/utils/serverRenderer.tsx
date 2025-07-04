@@ -1,4 +1,3 @@
-import React from 'react';
 import { renderToString } from 'react-dom/server';
 import type { EmployeeReview } from '../types/employee';
 import { EmployeeReportPage } from '../components/EmployeeReportPage';

@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom';
 import { render } from '@testing-library/react';
 import { Star } from '../Star';
-import React from 'react';
 
 describe('Star component', () => {
   it('renders a filled star when filled=true', () => {
