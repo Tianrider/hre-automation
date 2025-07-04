@@ -27,7 +27,8 @@ export const employeeReviewSchema = z.object({
   ratings: ratingsSchema,
   comment: z.array(z.string())
     .min(1, "At least one comment is required")
-    .transform(comments => comments.filter(c => c.trim().length > 0)) // Remove empty comments
+    .transform(comments => comments.filter(c => c.trim().length > 0)), // Remove empty comments
+  finalRating: z.number()
 });
 
 // Schema for an array of employee reviews
