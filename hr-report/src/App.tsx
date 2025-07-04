@@ -5,6 +5,8 @@ import { EmployeeReportPage } from '@/components/EmployeeReportPage'
 import { sampleEmployee } from '@/data/sample'
 import './App.css'
 import { validateEmployeeReviewsSafe } from '@/utils/validation'
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 function App() {
   const [rating, setRating] = useState(3)
@@ -22,7 +24,7 @@ function App() {
     reader.readAsText(file);
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     let data;
     try {
       data = JSON.parse(jsonInput);
@@ -34,7 +36,17 @@ function App() {
     if (!result.success) {
       setStatus('Validation failed: ' + JSON.stringify(result.errors));
     } else {
-      setStatus(`Valid! ${result.data.length} employee reviews loaded.`);
+      setStatus(`Valid! ${result.data.length} employee reviews loaded. Generating ZIP...`);
+      // --- ZIP GENERATION DEMO ---
+      const zip = new JSZip();
+      for (const employee of result.data) {
+        const filename = `${slugify(employee.name)}_${period}.pdf`;
+        // For demo, just add a dummy text file. Replace with PDF bytes in real implementation.
+        zip.file(filename, `This would be the PDF for ${employee.name}`);
+      }
+      const content = await zip.generateAsync({ type: 'blob' });
+      saveAs(content, `hr-reports_${period}.zip`);
+      setStatus(`ZIP generated and download triggered for ${result.data.length} employees.`);
     }
   };
 
@@ -131,3 +143,11 @@ function App() {
 }
 
 export default App
+
+// Add a simple slugify function
+function slugify(str: string): string {
+  return str
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)+/g, '');
+}

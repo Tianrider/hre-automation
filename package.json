@@ -1,9 +1,12 @@
 {
   "dependencies": {
     "archiver": "^7.0.1",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
     "zod": "^3.25.71"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.7",
     "puppeteer": "^24.11.2"
   }
 }

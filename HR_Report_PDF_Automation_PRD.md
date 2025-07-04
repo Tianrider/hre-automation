@@ -176,7 +176,7 @@ This project will streamline HR's quarterly review workflow by eliminating manua
 ### 7.0 Web UI (Optional but recommended)
 
 -   [x] **7.1 Set up minimal React page** under `/` with textarea / file-upload for JSON and Download button.
--   [ ] **7.2 Use `FileSaver.js`** to trigger ZIP download in browser.
+-   [x] **7.2 Use `FileSaver.js`** to trigger ZIP download in browser.
 -   [ ] **7.3 Add drag-and-drop area & progress bar** for UX polish.
 
 ### 8.0 Testing Strategy
