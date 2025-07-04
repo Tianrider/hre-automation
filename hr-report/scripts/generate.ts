@@ -4,6 +4,7 @@ const { Command } = require('commander');
 const path = require('path');
 const fs = require('fs');
 const puppeteer = require('puppeteer');
+const archiver = require('archiver');
 
 // Get the absolute path to src directory
 const srcDir = path.resolve(__dirname, '../src');
@@ -91,6 +92,30 @@ program
       }
       await browser.close();
       // --- PDF GENERATION END ---
+
+      // --- ZIP PACKAGING START ---
+      const zipFilename = `hr-reports_${period}.zip`;
+      const zipPath = path.join(outDir, zipFilename);
+      const output = fs.createWriteStream(zipPath);
+      const archive = archiver('zip', { zlib: { level: 9 } });
+
+      output.on('close', function () {
+        console.log(`Created ZIP archive: ${zipPath} (${archive.pointer()} total bytes)`);
+        // Optionally, clean up individual PDFs after zipping
+        fs.readdirSync(outDir)
+          .filter(f => f.endsWith('.pdf') && f.includes(`_${period}.pdf`))
+          .forEach(f => fs.unlinkSync(path.join(outDir, f)));
+      });
+      archive.on('error', function(err){ throw err; });
+      archive.pipe(output);
+      // Add all PDFs for this period
+      fs.readdirSync(outDir)
+        .filter(f => f.endsWith('.pdf') && f.includes(`_${period}.pdf`))
+        .forEach(f => {
+          archive.file(path.join(outDir, f), { name: f });
+        });
+      await archive.finalize();
+      // --- ZIP PACKAGING END ---
 
       // Log success
       console.log(`Successfully validated ${validationResult.data.length} employee reviews`);
