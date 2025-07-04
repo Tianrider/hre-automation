@@ -169,7 +169,7 @@ This project will streamline HR's quarterly review workflow by eliminating manua
 ### 6.0 PDF Export & ZIP Packaging
 
 -   [x] **6.1 Install Puppeteer** and launch with `--no-sandbox` for CI compatibility.
--   [ ] **6.2 Loop employees**: `page.setContent(html)`; `page.pdf({ format: 'A4', printBackground: true })`.
+-   [x] **6.2 Loop employees**: `page.setContent(html)`; `page.pdf({ format: 'A4', printBackground: true })`.
 -   [ ] **6.3 Filename convention**: kebab-case employee name + period.
 -   [ ] **6.4 Use `archiver`** to stream all PDFs into `hr-reports_<period>.zip`.
 

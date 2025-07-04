@@ -3,13 +3,14 @@
 const { Command } = require('commander');
 const path = require('path');
 const fs = require('fs');
+const puppeteer = require('puppeteer');
 
 // Get the absolute path to src directory
 const srcDir = path.resolve(__dirname, '../src');
 
 // Import our modules using absolute paths
 const { validateEmployeeReviewsSafe } = require(path.join(srcDir, 'utils/validation'));
-const { renderHtmlForEmployees } = require(path.join(srcDir, 'utils/serverRenderer'));
+const { renderHtmlForEmployees, renderEmployeeDocument } = require(path.join(srcDir, 'utils/serverRenderer'));
 
 interface CLIOptions {
   input: string;
@@ -74,6 +75,23 @@ program
       const debugHtmlPath = path.join(outDir, 'debug.html');
       fs.writeFileSync(debugHtmlPath, html, 'utf-8');
 
+      // --- PDF GENERATION START ---
+      const employees = validationResult.data;
+      const period = options.period;
+      const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+      for (const employee of employees) {
+        const employeeHtml = renderEmployeeDocument(employee, { period });
+        const page = await browser.newPage();
+        await page.setContent(employeeHtml, { waitUntil: 'networkidle0' });
+        const filename = `${slugify(employee.name)}_${period}.pdf`;
+        const pdfPath = path.join(outDir, filename);
+        await page.pdf({ path: pdfPath, format: 'A4', printBackground: true });
+        await page.close();
+        console.log(`Generated PDF: ${pdfPath}`);
+      }
+      await browser.close();
+      // --- PDF GENERATION END ---
+
       // Log success
       console.log(`Successfully validated ${validationResult.data.length} employee reviews`);
       console.log('Generated debug HTML file:', debugHtmlPath);
@@ -89,4 +107,12 @@ program
     }
   });
 
-program.parse(); 
+program.parse();
+
+// Simple slugify function for filenames
+function slugify(str) {
+  return str
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)+/g, '');
+} 
