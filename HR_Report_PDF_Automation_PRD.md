@@ -133,66 +133,66 @@ This project will streamline HR's quarterly review workflow by eliminating manua
 
 ### 1.0 Project Scaffolding & Tooling
 
--   [ ] **1.1 Init repo:** `npm create vite@latest hr-report -- --template react-ts`;
+-   [x] **1.1 Init repo:** `npm create vite@latest hr-report -- --template react-ts`;
         add project to GitHub.
--   [ ] **1.2 Tailwind setup:** `npm i -D tailwindcss postcss autoprefixer` then `npx tailwindcss init -p`; configure `content` paths and extend colours/fonts.
--   [ ] **1.3 Linting & formatting:** Install `eslint`, `@typescript-eslint/*`, `eslint-plugin-react`, `prettier`, `eslint-config-prettier`, `eslint-plugin-tailwindcss`; add `.eslintrc.cjs` and `.prettierrc`.
--   [ ] **1.4 Commit hooks:** Configure Husky + lint-staged to run `eslint --fix` & `prettier --write` pre-commit.
--   [ ] **1.5 Path aliases:** Update `tsconfig.json` + `vite.config.ts` to support `@/` alias.
+-   [x] **1.2 Tailwind setup:** `npm i -D tailwindcss postcss autoprefixer` then `npx tailwindcss init -p`; configure `content` paths and extend colours/fonts.
+-   [x] **1.3 Linting & formatting:** Install `eslint`, `@typescript-eslint/*`, `eslint-plugin-react`, `prettier`, `eslint-config-prettier`, `eslint-plugin-tailwindcss`; add `.eslintrc.cjs` and `.prettierrc`.
+-   [x] **1.4 Commit hooks:** Configure Husky + lint-staged to run `eslint --fix` & `prettier --write` pre-commit.
+-   [x] **1.5 Path aliases:** Update `tsconfig.json` + `vite.config.ts` to support `@/` alias.
 
 ### 2.0 UI Template & Styling
 
--   [ ] **2.1 Star icon (`<Star />`):** Reusable SVG component with `filled` & `size` props.
--   [ ] **2.2 Rating row (`<RatingRow />`):** Accepts label + 1-6 rating, renders star set.
--   [ ] **2.3 Employee page (`<EmployeeReportPage />`):** Uses Tailwind for A4 sizing, margins, logo header, page number footer, and `break-after-page` utility (Tailwind v3.3) to force pagination.
--   [ ] **2.4 Print styles:** Add `@media print` in `index.css` to hide non-print UI and ensure exact dimensions.
--   [ ] **2.5 Sample story:** Add Storybook (optional) or Vite preview route to review component visually.
+-   [x] **2.1 Star icon (`<Star />`):** Reusable SVG component with `filled` & `size` props.
+-   [x] **2.2 Rating row (`<RatingRow />`):** Accepts label + 1-6 rating, renders star set.
+-   [x] **2.3 Employee page (`<EmployeeReportPage />`):** Uses Tailwind for A4 sizing, margins, logo header, page number footer, and `break-after-page` utility (Tailwind v3.3) to force pagination.
+-   [x] **2.4 Print styles:** Add `@media print` in `index.css` to hide non-print UI and ensure exact dimensions.
+-   [x] **2.5 Sample story:** Add Storybook (optional) or Vite preview route to review component visually.
 
 ### 3.0 Data Types & Validation
 
--   [ ] **3.1 Define `EmployeeReview` TypeScript interface** in `src/types.d.ts`.
--   [ ] **3.2 Implement Zod schema** (`utils/validation.ts`) for runtime validation and convert to TS type via `zod`.
--   [ ] **3.3 Write unit tests** to verify invalid payloads are rejected.
+-   [x] **3.1 Define `EmployeeReview` TypeScript interface** in `src/types.d.ts`.
+-   [x] **3.2 Implement Zod schema** (`utils/validation.ts`) for runtime validation and convert to TS type via `zod`.
+-   [x] **3.3 Write unit tests** to verify invalid payloads are rejected.
 
 ### 4.0 Server-Side HTML Rendering
 
--   [ ] **4.1 Install `react-dom/server`** and helper to render `<EmployeeReportPage />` to static markup.
--   [ ] **4.2 Build `renderHtmlForEmployees()`** utility that wraps each rendered page in `<div class="report-page">` and inserts class `break-after-page`.
--   [ ] **4.3 Inline Tailwind styles for print** using `@tailwindcss/typography` plugin or `@mui/tailwindcss-ssr` if needed to capture critical CSS.
+-   [x] **4.1 Install `react-dom/server`** and helper to render `<EmployeeReportPage />` to static markup.
+-   [x] **4.2 Build `renderHtmlForEmployees()`** utility that wraps each rendered page in `<div class="report-page">` and inserts class `break-after-page`.
+-   [x] **4.3 Inline Tailwind styles for print** using `@tailwindcss/typography` plugin or `@mui/tailwindcss-ssr` if needed to capture critical CSS.
 
 ### 5.0 CLI Tool (`scripts/generate.ts`)
 
--   [ ] **5.1 Parse CLI flags** with `commander`: `--input`, `--period`, `--out`.
--   [ ] **5.2 Read & validate JSON** via Zod; show pretty error list on failure.
--   [ ] **5.3 Call HTML renderer** and save intermediate HTML file for debug (`reports/debug.html`).
+-   [x] **5.1 Parse CLI flags** with `commander`: `--input`, `--period`, `--out`.
+-   [x] **5.2 Read & validate JSON** via Zod; show pretty error list on failure.
+-   [x] **5.3 Call HTML renderer** and save intermediate HTML file for debug (`reports/debug.html`).
 
 ### 6.0 PDF Export & ZIP Packaging
 
--   [ ] **6.1 Install Puppeteer** and launch with `--no-sandbox` for CI compatibility.
--   [ ] **6.2 Loop employees**: `page.setContent(html)`; `page.pdf({ format: 'A4', printBackground: true })`.
--   [ ] **6.3 Filename convention**: kebab-case employee name + period.
--   [ ] **6.4 Use `archiver`** to stream all PDFs into `hr-reports_<period>.zip`.
+-   [x] **6.1 Install Puppeteer** and launch with `--no-sandbox` for CI compatibility.
+-   [x] **6.2 Loop employees**: `page.setContent(html)`; `page.pdf({ format: 'A4', printBackground: true })`.
+-   [x] **6.3 Filename convention**: kebab-case employee name + period.
+-   [x] **6.4 Use `archiver`** to stream all PDFs into `hr-reports_<period>.zip`.
 
 ### 7.0 Web UI (Optional but recommended)
 
--   [ ] **7.1 Set up minimal React page** under `/` with textarea / file-upload for JSON and Download button.
--   [ ] **7.2 Use `FileSaver.js`** to trigger ZIP download in browser.
--   [ ] **7.3 Add drag-and-drop area & progress bar** for UX polish.
+-   [x] **7.1 Set up minimal React page** under `/` with textarea / file-upload for JSON and Download button.
+-   [x] **7.2 Use `FileSaver.js`** to trigger ZIP download in browser.
+-   [x] **7.3 Add drag-and-drop area & progress bar** for UX polish.
 
 ### 8.0 Testing Strategy
 
--   [ ] **8.1 Unit tests**: slugify, star component renders correct number of stars.
--   [ ] **8.2 Integration test**: run full CLI on sample `input.json`, assert ZIP exists & contains correct file count.
--   [ ] **8.3 Visual regression**: Generate PDF, rasterise first page (Ghostscript or pdf-to-png) and compare with baseline using `pixelmatch`.
+-   [x] **8.1 Unit tests**: slugify, star component renders correct number of stars.
+-   [x] **8.2 Integration test**: run full CLI on sample `input.json`, assert ZIP exists & contains correct file count.
+-   [x] **8.3 Visual regression**: Generate PDF, rasterise first page (Ghostscript or pdf-to-png) and compare with baseline using `pixelmatch`.
 
 ### 9.0 Continuous Integration (GitHub Actions)
 
--   [ ] **9.1 Workflow**: install deps, run `npm run lint`, `npm test`, execute sample generation (Puppeteer headless) and upload ZIP as artefact.
--   [ ] **9.2 Cache node_modules** with `actions/cache`.
--   [ ] **9.3 Dependabot** for monthly dependency bumps.
+-   [x] **9.1 Workflow**: install deps, run `npm run lint`, `npm test`, execute sample generation (Puppeteer headless) and upload ZIP as artefact.
+-   [x] **9.2 Cache node_modules** with `actions/cache`.
+-   [x] **9.3 Dependabot** for monthly dependency bumps.
 
 ### 10.0 Documentation & Samples
 
--   [ ] **10.1 README.md**: installation, CLI/web usage examples, architecture diagram.
--   [ ] **10.2 Sample data**: `examples/sample-reviews.json` with 3-5 employees.
--   [ ] **10.3 Changelog & versioning**: follow Conventional Commits; automate release notes with `semantic-release`.
+-   [x] **10.1 README.md**: installation, CLI/web usage examples, architecture diagram.
+-   [x] **10.2 Sample data**: `examples/sample-reviews.json` with 3-5 employees.
+-   [x] **10.3 Changelog & versioning**: follow Conventional Commits; automate release notes with `semantic-release`.

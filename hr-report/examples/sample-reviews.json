@@ -1,0 +1,78 @@
+[
+  {
+    "name": "John Doe",
+    "ratings": {
+      "tanggungJawab": 4,
+      "kerjaSama": 5,
+      "komunikasi": 4,
+      "pekaDanInisiatif": 4,
+      "kedekatan": 3,
+      "profesional": 5
+    },
+    "comment": [
+      "John consistently shows great responsibility and teamwork.",
+      "Always willing to help others when needed."
+    ]
+  },
+  {
+    "name": "Jane Smith",
+    "ratings": {
+      "tanggungJawab": 6,
+      "kerjaSama": 5,
+      "komunikasi": 5,
+      "pekaDanInisiatif": 6,
+      "kedekatan": 4,
+      "profesional": 6
+    },
+    "comment": [
+      "Excellent leadership skills",
+      "Great at mentoring junior team members",
+      "Takes initiative in challenging situations"
+    ]
+  },
+  {
+    "name": "Ahmad Pratama",
+    "ratings": {
+      "tanggungJawab": 5,
+      "kerjaSama": 4,
+      "komunikasi": 5,
+      "pekaDanInisiatif": 5,
+      "kedekatan": 5,
+      "profesional": 4
+    },
+    "comment": [
+      "Selalu tepat waktu dalam menyelesaikan tugas.",
+      "Mudah diajak kerja sama dan komunikatif."
+    ]
+  },
+  {
+    "name": "Maria Tan",
+    "ratings": {
+      "tanggungJawab": 3,
+      "kerjaSama": 4,
+      "komunikasi": 3,
+      "pekaDanInisiatif": 4,
+      "kedekatan": 4,
+      "profesional": 3
+    },
+    "comment": [
+      "Perlu meningkatkan komunikasi dalam tim.",
+      "Sudah menunjukkan perkembangan positif."
+    ]
+  },
+  {
+    "name": "Budi Santoso",
+    "ratings": {
+      "tanggungJawab": 6,
+      "kerjaSama": 6,
+      "komunikasi": 6,
+      "pekaDanInisiatif": 6,
+      "kedekatan": 6,
+      "profesional": 6
+    },
+    "comment": [
+      "Sangat inspiratif dan menjadi panutan tim.",
+      "Selalu membantu rekan kerja tanpa diminta."
+    ]
+  }
+] 

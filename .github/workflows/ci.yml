@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install --workspaces --legacy-peer-deps
+
+      - name: Lint
+        run: npm run lint --workspace=hr-report
+
+      - name: Run tests
+        run: npm test --workspace=hr-report
+
+      - name: Generate sample ZIP
+        run: |
+          cd hr-report
+          node scripts/generate.js --input examples/sample-reviews.json --period 2024-Q2 --out reports
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: hr-reports-2024-Q2
+          path: hr-report/reports/hr-reports_2024-Q2.zip
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            hr-report/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node- 
