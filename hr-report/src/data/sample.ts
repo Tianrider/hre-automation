@@ -3,18 +3,18 @@ import type { EmployeeReview } from '@/types/employee';
 export const sampleEmployee: EmployeeReview = {
   name: 'John Doe',
   ratings: {
-    tanggungJawab: 4,
+    tanggungJawab: 4.5,
     kerjaSama: 5,
     komunikasi: 4,
-    pekaDanInisiatif: 3,
-    kedekatan: 4,
-    profesional: 5,
+    pekaDanInisiatif: 4.8,
+    kedekatan: 4.2,
+    profesional: 4.9,
   },
   comment: [
-    'Consistently shows great responsibility in handling tasks',
-    'Excellent team player, always willing to help others',
-    'Good communication skills but can improve in formal settings',
-    'Takes initiative in most situations',
+    'Excellent team player, always willing to help.',
+    'Great communication skills.',
+    'Proactive and takes initiative on new projects.',
   ],
-  finalRating: 4.17,
-}; 
+  finalRating: 4.6,
+  divisi: 'Software Engineering',
+};

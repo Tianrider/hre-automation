@@ -1,7 +1,10 @@
-import React from 'react';
-import { RatingRow } from './RatingRow';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import type { EmployeeReview } from '../types/employee';
 import coverImage from '../assets/cover.png';
+import page2 from '../assets/page-2.png';
+import templateIpo from '../assets/template-ipo.svg';
+import page3 from '../assets/page-3.png';
+import endPage from '../assets/ending.png';
 
 interface EmployeeReportPageProps {
   employee: EmployeeReview;
@@ -10,24 +13,30 @@ interface EmployeeReportPageProps {
   period: string;
 }
 
-const RATING_LABELS = {
-  tanggungJawab: 'Tanggung Jawab',
-  kerjaSama: 'Kerja Sama',
-  komunikasi: 'Komunikasi',
-  pekaDanInisiatif: 'Peka dan Inisiatif',
-  kedekatan: 'Kedekatan',
-  profesional: 'Profesional',
-} as const;
+export const EmployeeReportPage: React.FC<EmployeeReportPageProps> = ({ employee }) => {
+  const commentsContainerRef = useRef<HTMLDivElement>(null);
+  const [commentFontSize, setCommentFontSize] = useState('text-xl');
 
-export const EmployeeReportPage: React.FC<EmployeeReportPageProps> = ({
-  employee,
-  pageNumber,
-  totalPages,
-  period,
-}) => {
-  const ratingEntries = Object.entries(RATING_LABELS) as [keyof typeof RATING_LABELS, string][];
-  const firstHalfRatings = ratingEntries.slice(0, 3);
-  const secondHalfRatings = ratingEntries.slice(3);
+  useLayoutEffect(() => {
+    setCommentFontSize('text-xl');
+  }, [employee.comment]);
+
+  useLayoutEffect(() => {
+    if (commentsContainerRef.current) {
+      const { offsetHeight } = commentsContainerRef.current;
+      if (offsetHeight > 600) {
+        if (commentFontSize === 'text-xl') {
+          setCommentFontSize('text-md');
+        } else if (commentFontSize === 'text-lg') {
+          setCommentFontSize('text-base');
+        } else if (commentFontSize === 'text-base') {
+          setCommentFontSize('text-sm');
+        } else if (commentFontSize === 'text-sm') {
+          setCommentFontSize('text-xs');
+        }
+      }
+    }
+  }, [commentFontSize, employee.comment]);
 
   return (
     <div
@@ -36,252 +45,223 @@ export const EmployeeReportPage: React.FC<EmployeeReportPageProps> = ({
     >
       {/* PAGE 1: Header and Employee Information */}
       <div
-        className="report-page bg-white text-black"
+        className="report-page"
         style={{
           width: '210mm',
           height: '297mm',
-          padding: '20mm',
           boxSizing: 'border-box',
           pageBreakAfter: 'always',
-          backgroundImage: `url(${coverImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
-        {/* Header with Logo */}
-        <header className="mb-8 flex items-center justify-between">
-          <div className="text-xl font-bold">Company Logo</div>
-          <div className="text-right">
-            <h2 className="text-lg font-medium">Performance Review</h2>
-            <p className="text-sm text-gray-600">{period}</p>
-          </div>
-        </header>
-
-        {/* Employee Name */}
-        <h1 className="mb-8 text-3xl font-bold text-center">{employee.name}</h1>
-
-        {/* Page 1 Content */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-6">Employee Information</h2>
-          <div className="space-y-4">
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-lg">
-                <strong>Employee:</strong> {employee.name}
-              </p>
-              <p className="text-lg">
-                <strong>Review Period:</strong> {period}
-              </p>
-              <p className="text-lg">
-                <strong>Report:</strong> Page {pageNumber} of {totalPages}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Introduction Section */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Performance Review Overview</h2>
-          <p className="text-gray-700 leading-relaxed">
-            This comprehensive performance review evaluates {employee.name}'s contributions and
-            performance across multiple key competency areas during the {period} period. The
-            assessment covers professional skills, teamwork, communication, and overall workplace
-            effectiveness.
-          </p>
-        </div>
-
-        {/* Page Footer */}
+        <img
+          src={coverImage}
+          alt="Report Cover"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            zIndex: 1,
+          }}
+        />
         <div
-          className="text-center text-sm text-gray-500 mt-auto"
-          style={{ position: 'absolute', bottom: '15mm', left: '20mm', right: '20mm' }}
+          className="absolute top-[60%] w-2/3 left-1/2 -translate-x-1/2 flex flex-col text-white"
+          style={{ zIndex: 2 }}
         >
-          Page 1 of 4 - {employee.name} Performance Review
+          <div className="bg-[#1c465c] rounded-md mb-4">
+            <p className="text-center text-2xl pb-8">{employee.name}</p>
+          </div>
+          <div className="bg-[#1c465c] rounded-md">
+            <p className="text-center text-2xl pb-8">{employee.divisi}</p>
+          </div>
         </div>
       </div>
 
       {/* PAGE 2: First Half of Ratings */}
       <div
-        className="report-page bg-white text-black"
+        className="report-page"
         style={{
           width: '210mm',
           height: '297mm',
-          padding: '20mm',
           boxSizing: 'border-box',
           pageBreakAfter: 'always',
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
-        {/* Page Header */}
-        <header className="mb-8 flex items-center justify-between">
-          <div className="text-xl font-bold">Company Logo</div>
-          <div className="text-right">
-            <h2 className="text-lg font-medium">Performance Review - Page 2</h2>
-            <p className="text-sm text-gray-600">
-              {employee.name} | {period}
+        <img
+          src={page2}
+          alt="Report Cover"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            zIndex: 1,
+          }}
+        />
+        <div
+          className="absolute top-[27%] w-40 left-1/2 -translate-x-1/2 flex flex-col text-white"
+          style={{ zIndex: 2 }}
+        >
+          <div className="bg-[#1c465c] rounded-full mb-4 relative w-32 h-20">
+            <p className="text-center text-5xl font-bold absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              {employee.finalRating}
             </p>
           </div>
-        </header>
-
-        <h2 className="text-2xl font-semibold mb-8">Core Competencies (Part 1)</h2>
-
-        {/* First Half Ratings */}
-        <div className="mb-8 rounded-lg border border-gray-200 bg-gray-50 p-6">
-          {firstHalfRatings.map(([key, label]) => (
-            <RatingRow key={key} label={label} rating={employee.ratings[key]} />
-          ))}
         </div>
 
-        {/* Additional Analysis */}
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold mb-4">Performance Analysis</h3>
-          <p className="text-gray-700 leading-relaxed">
-            The first set of competencies demonstrates {employee.name}'s foundational professional
-            skills. These ratings reflect consistent performance in key areas that form the backbone
-            of effective workplace contribution.
-          </p>
-        </div>
+        <img
+          src={templateIpo}
+          alt="Report Cover"
+          style={{
+            position: 'absolute',
+            zIndex: 2,
+          }}
+          className="top-[50%] left-1/2 -translate-x-1/2"
+        />
+        <div className="absolute top-[50%] left-1/2 -translate-x-1/2 z-10 gap-[70px] pt-12 grid grid-cols-3 text-white">
+          <div className="col-span-1">
+            <div className="bg-[#1c465c] rounded-full mb-[100px] relative w-20 h-12">
+              <p className="text-center text-3xl font-bold absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                {employee.ratings.tanggungJawab}
+              </p>
+            </div>
+            <div className="bg-[#1c465c] rounded-full mb-4 relative w-20 h-12">
+              <p className="text-center text-3xl font-bold absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                {employee.ratings.pekaDanInisiatif}
+              </p>
+            </div>
+          </div>
 
-        {/* Page Footer */}
-        <div
-          className="text-center text-sm text-gray-500 mt-auto"
-          style={{ position: 'absolute', bottom: '15mm', left: '20mm', right: '20mm' }}
-        >
-          Page 2 of 4 - {employee.name} Performance Review
+          <div className="col-span-1 gap-8">
+            <div className="bg-[#1c465c] rounded-full mb-[100px] relative w-20 h-12">
+              <p className="text-center text-3xl font-bold absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                {employee.ratings.kerjaSama}
+              </p>
+            </div>
+            <div className="bg-[#1c465c] rounded-full mb-4 relative w-20 h-12">
+              <p className="text-center text-3xl font-bold absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                {employee.ratings.kedekatan}
+              </p>
+            </div>
+          </div>
+
+          <div className="col-span-1 gap-8">
+            <div className="bg-[#1c465c] rounded-full mb-[100px] relative w-20 h-12">
+              <p className="text-center text-3xl font-bold absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                {employee.ratings.komunikasi}
+              </p>
+            </div>
+            <div className="bg-[#1c465c] rounded-full mb-4 relative w-20 h-12">
+              <p className="text-center text-3xl font-bold absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                {employee.ratings.profesional}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* PAGE 3: Second Half of Ratings */}
+      {/* PAGE 3: Peer Comments */}
       <div
-        className="report-page bg-white text-black"
+        className="report-page"
         style={{
           width: '210mm',
           height: '297mm',
-          padding: '20mm',
           boxSizing: 'border-box',
           pageBreakAfter: 'always',
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
-        {/* Page Header */}
-        <header className="mb-8 flex items-center justify-between">
-          <div className="text-xl font-bold">Company Logo</div>
-          <div className="text-right">
-            <h2 className="text-lg font-medium">Performance Review - Page 3</h2>
-            <p className="text-sm text-gray-600">
-              {employee.name} | {period}
-            </p>
-          </div>
-        </header>
+        <img
+          src={page3}
+          alt="Report Cover"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            zIndex: 1,
+          }}
+        />
 
-        <h2 className="text-2xl font-semibold mb-8">Core Competencies (Part 2)</h2>
-
-        {/* Second Half Ratings */}
-        <div className="mb-8 rounded-lg border border-gray-200 bg-gray-50 p-6">
-          {secondHalfRatings.map(([key, label]) => (
-            <RatingRow key={key} label={label} rating={employee.ratings[key]} />
-          ))}
-        </div>
-
-        {/* Comments Section */}
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold mb-4">Kesan & Pesan</h3>
-          <ul className="list-inside list-disc space-y-2">
-            {employee.comment.map((comment, index) => (
-              <li key={index} className="text-gray-700">
-                {comment}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Page Footer */}
         <div
-          className="text-center text-sm text-gray-500 mt-auto"
-          style={{ position: 'absolute', bottom: '15mm', left: '20mm', right: '20mm' }}
+          className={`absolute w-[65%] top-[23%] h-[650px] text-black left-1/2 -translate-x-1/2 z-10 pt-12 ${commentFontSize}`}
         >
-          Page 3 of 4 - {employee.name} Performance Review
+          <div ref={commentsContainerRef}>
+            {employee.comment.map((comment) => (
+              <div key={comment}>
+                <p className="text-start pb-4">{comment}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* PAGE 4: Final Rating and Summary */}
       <div
-        className="report-page bg-white text-black"
+        className="report-page"
         style={{
           width: '210mm',
           height: '297mm',
-          padding: '20mm',
           boxSizing: 'border-box',
           pageBreakAfter: 'always',
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
-        {/* Page Header */}
-        <header className="mb-8 flex items-center justify-between">
-          <div className="text-xl font-bold">Company Logo</div>
-          <div className="text-right">
-            <h2 className="text-lg font-medium">Performance Review - Page 4</h2>
-            <p className="text-sm text-gray-600">
-              {employee.name} | {period}
-            </p>
+        <img
+          src={endPage}
+          alt="Report Cover"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            zIndex: 1,
+          }}
+        />
+
+        <p className="absolute z-20 top-[28%] w-[80%] italic left-1/2 -translate-x-1/2 text-start text-white text-lg">
+          <div className="mb-2">Hi, {employee.name}!</div>
+          <div className="mb-0">
+            {' '}
+            Thanks a bunch for all your hard work, dedication, and positive energy throughout this
+            term.
           </div>
-        </header>
-
-        <h2 className="text-2xl font-semibold mb-8 text-center">Overall Performance Summary</h2>
-
-        {/* Final Rating - Big Number */}
-        <div className="w-full flex justify-center items-center mb-8">
-          <div className="text-center">
-            <div className="text-8xl font-extrabold text-yellow-500 drop-shadow-lg mb-4">
-              {employee.finalRating.toFixed(2)}
-            </div>
-            <p className="text-xl font-semibold text-gray-700">Overall Performance Score</p>
+          <div className="mb-4">
+            Your presence in the team has truly made a difference, not just in what we achieved, but
+            in how we got there, together.
           </div>
-        </div>
-
-        {/* Performance Summary */}
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold mb-4">Performance Summary</h3>
-          <div className="bg-gray-50 p-6 rounded-lg">
-            <p className="text-gray-700 leading-relaxed mb-4">
-              {employee.name} has demonstrated{' '}
-              {employee.finalRating >= 4.5
-                ? 'exceptional'
-                : employee.finalRating >= 4.0
-                  ? 'strong'
-                  : employee.finalRating >= 3.5
-                    ? 'satisfactory'
-                    : employee.finalRating >= 3.0
-                      ? 'acceptable'
-                      : 'needs improvement'}{' '}
-              performance during the {period} review period.
-            </p>
-            <p className="text-gray-700 leading-relaxed">
-              This comprehensive evaluation reflects consistent effort across all measured
-              competency areas and provides a foundation for continued professional development.
-            </p>
+          <div className="">
+            As we move forward, keep growing, keep contributing, and keep inspiring those around
+            you.
           </div>
-        </div>
-
-        {/* Signature Section */}
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold mb-4">Review Completion</h3>
-          <div className="flex justify-between">
-            <div className="text-center">
-              <div className="border-t border-gray-400 w-48 mb-2"></div>
-              <p className="text-sm text-gray-600">Employee Signature</p>
-            </div>
-            <div className="text-center">
-              <div className="border-t border-gray-400 w-48 mb-2"></div>
-              <p className="text-sm text-gray-600">Supervisor Signature</p>
-            </div>
+          <div className="mb-4">
+            Your journey in this <span className="font-bold">EXERCISE</span> is far from over and
+            we’re so excited to see where it leads you next.
           </div>
-        </div>
-
-        {/* Page Footer */}
-        <div
-          className="text-center text-sm text-gray-500 mt-auto"
-          style={{ position: 'absolute', bottom: '15mm', left: '20mm', right: '20mm' }}
-        >
-          Page 4 of 4 - {employee.name} Performance Review | Review Date:{' '}
-          {new Date().toLocaleDateString()}
-        </div>
+          <div className="mb-4">
+            Let’s keep supporting each other, learning from every challenge, and making{' '}
+            <span className="font-bold">EXERCISE</span> not just a place to work, but a place to
+            grow.
+          </div>
+          <div className="mb-4">We’re proud of you, keep it up!</div>
+          <div className="font-bold">— With love,</div>
+          <div>HR EXERCISE FTUI</div>
+          #𝓼𝓽𝓮𝓬𝓾-𝓼𝓽𝓮𝓬𝓾
+        </p>
       </div>
     </div>
   );

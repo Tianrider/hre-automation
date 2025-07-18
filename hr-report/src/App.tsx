@@ -1,8 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Star } from '@/components/Star';
-import { RatingRow } from '@/components/RatingRow';
 import { EmployeeReportPage } from '@/components/EmployeeReportPage';
-import { sampleEmployee } from '@/data/sample';
 import './App.css';
 import { validateEmployeeReviewsSafe } from '@/utils/validation';
 import JSZip from 'jszip';
@@ -11,7 +8,7 @@ import html2canvas from 'html2canvas';
 import { createRoot } from 'react-dom/client';
 
 function App() {
-  const [rating, setRating] = useState(3);
+  const [imageDebug] = useState<string | null>(null);
   const [jsonInput, setJsonInput] = useState('');
   const [period, setPeriod] = useState('2024-Q2');
   const [status, setStatus] = useState('');
@@ -113,9 +110,9 @@ function App() {
     container.style.margin = '0';
     container.style.padding = '0';
     container.style.boxSizing = 'border-box';
-    container.style.fontSize = '14px';
+    // container.style.fontSize = '14px';
     container.style.fontFamily = 'Arial, sans-serif';
-    container.style.lineHeight = '1.4';
+    // container.style.lineHeight = '1.4';
     document.body.appendChild(container);
 
     // Render the employee report
@@ -138,6 +135,9 @@ function App() {
     // Create PDF
     const pdf = new jsPDF('p', 'mm', 'a4');
 
+    // Get debug container
+    const debugContainer = document.getElementById('debug-canvas-container');
+
     // Process each page
     for (let pageIndex = 0; pageIndex < reportPages.length; pageIndex++) {
       const pageElement = reportPages[pageIndex] as HTMLElement;
@@ -145,12 +145,12 @@ function App() {
       // Ensure the page element matches exact A4 dimensions
       pageElement.style.width = `${A4_WIDTH_MM}mm`;
       pageElement.style.height = `${A4_HEIGHT_MM}mm`;
-      pageElement.style.margin = '0';
-      pageElement.style.padding = '20mm';
-      pageElement.style.boxSizing = 'border-box';
-      pageElement.style.overflow = 'hidden';
-      pageElement.style.position = 'relative';
-      pageElement.style.backgroundColor = 'white';
+      // pageElement.style.margin = '0';
+      // pageElement.style.padding = '20mm';
+      // pageElement.style.boxSizing = 'border-box';
+      // pageElement.style.overflow = 'hidden';
+      // pageElement.style.position = 'relative';
+      // pageElement.style.backgroundColor = 'white';
 
       // Convert this page to canvas with exact dimensions
       const canvas = await html2canvas(pageElement, {
@@ -163,7 +163,32 @@ function App() {
         logging: false,
       });
 
-      const imgData = canvas.toDataURL('image/png');
+      // --- DEBUG START ---
+      if (debugContainer) {
+        const title = document.createElement('h3');
+        title.innerText = `Debug Canvas for ${employee.name} - Page ${pageIndex + 1}`;
+        title.className = 'mt-4 font-semibold';
+
+        const newCanvas = canvas.cloneNode() as HTMLCanvasElement;
+        newCanvas.style.width = '50%';
+        newCanvas.style.height = 'auto';
+        newCanvas.style.border = '2px solid #e53e3e';
+        newCanvas.style.marginTop = '8px';
+
+        debugContainer.appendChild(title);
+        debugContainer.appendChild(newCanvas);
+
+        const imgData = canvas.toDataURL('image/png');
+        const img = document.createElement('img');
+        img.src = imgData;
+        img.style.width = '50%';
+        img.style.border = '2px solid #38a169';
+        img.style.marginTop = '8px';
+        debugContainer.appendChild(img);
+      }
+      // --- DEBUG END ---
+
+      const imgDataForPdf = canvas.toDataURL('image/jpeg', 0.8);
 
       // Add new page if not the first page
       if (pageIndex > 0) {
@@ -171,7 +196,7 @@ function App() {
       }
 
       // Add image at exact A4 size without any scaling
-      pdf.addImage(imgData, 'PNG', 0, 0, A4_WIDTH_MM, A4_HEIGHT_MM);
+      pdf.addImage(imgDataForPdf, 'JPEG', 0, 0, A4_WIDTH_MM, A4_HEIGHT_MM);
     }
 
     // Clean up
@@ -182,6 +207,11 @@ function App() {
   };
 
   const handleExportCurrentPDF = async () => {
+    const debugContainer = document.getElementById('debug-canvas-container');
+    if (debugContainer) {
+      debugContainer.innerHTML = '<h2 class="text-xl font-bold mb-4">Debug Canvas Output</h2>';
+    }
+
     if (employeeData.length === 0) {
       setStatus('No employee data to export.');
       return;
@@ -218,6 +248,11 @@ function App() {
   };
 
   const handleExportZIP = async () => {
+    const debugContainer = document.getElementById('debug-canvas-container');
+    if (debugContainer) {
+      debugContainer.innerHTML = '<h2 class="text-xl font-bold mb-4">Debug Canvas Output</h2>';
+    }
+
     if (employeeData.length === 0) {
       setStatus('No employee data to export.');
       return;
@@ -424,55 +459,11 @@ function App() {
             </div>
           </div>
         )}
+      </div>
 
-        {/* Component Preview Section */}
-        <section className="rounded-lg bg-white p-6 shadow-lg text-gray-900">
-          <h2 className="mb-6 text-2xl font-bold">Component Preview</h2>
-
-          {/* Star Component */}
-          <div className="mb-8">
-            <h3 className="mb-4 text-lg font-semibold">Star Component</h3>
-            <div className="flex gap-4">
-              <Star filled={true} size={32} />
-              <Star filled={false} size={32} />
-            </div>
-          </div>
-
-          {/* Rating Row Component */}
-          <div className="mb-8">
-            <h3 className="mb-4 text-lg font-semibold">Rating Row Component</h3>
-            <div className="w-96">
-              <RatingRow label="Test Rating" rating={rating} />
-              <div className="mt-2">
-                <input
-                  type="range"
-                  min="0"
-                  max="6"
-                  value={rating}
-                  onChange={(e) => setRating(Number(e.target.value))}
-                  className="w-full"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Full Page Preview */}
-        <section className="rounded-lg bg-white p-6 shadow-lg text-gray-900">
-          <h2 className="mb-6 text-2xl font-bold">Full Page Preview</h2>
-          <p className="mb-4 text-gray-600">
-            Below is a preview of the complete employee report page. Use browser print preview
-            (Ctrl/Cmd + P) to see the exact PDF output.
-          </p>
-          <div className="scale-[0.7] origin-top-left">
-            <EmployeeReportPage
-              employee={sampleEmployee}
-              pageNumber={1}
-              totalPages={1}
-              period="2024-Q1"
-            />
-          </div>
-        </section>
+      <div id="debug-canvas-container" className="no-print mt-8 p-4 bg-gray-200">
+        <h2 className="text-xl font-bold mb-4">Debug Canvas Output</h2>
+        {imageDebug && <img src={imageDebug} alt="Debug Image" />}
       </div>
     </div>
   );

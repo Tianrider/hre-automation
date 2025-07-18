@@ -36,7 +36,7 @@ export function renderEmployeePage(
  */
 export function wrapWithDocumentTemplate(html: string): string {
   const criticalCss = getCriticalCss();
-  
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,20 +59,17 @@ export function wrapWithDocumentTemplate(html: string): string {
  * @param period The review period (e.g., "2024-Q1")
  * @returns Complete HTML document string with all employee pages
  */
-export function renderHtmlForEmployees(
-  employees: EmployeeReview[],
-  period: string
-): string {
+export function renderHtmlForEmployees(employees: EmployeeReview[], period: string): string {
   const totalPages = employees.length;
-  
+
   const pagesHtml = employees
     .map((employee, index) => {
       const pageHtml = renderEmployeePage(employee, {
         period,
         pageNumber: index + 1,
-        totalPages
+        totalPages,
       });
-      
+
       return `<div class="report-page">${pageHtml}</div>`;
     })
     .join('\n');
@@ -86,10 +83,7 @@ export function renderHtmlForEmployees(
  * @param options Rendering options
  * @returns Complete HTML document string
  */
-export function renderEmployeeDocument(
-  employee: EmployeeReview,
-  options: RenderOptions
-): string {
+export function renderEmployeeDocument(employee: EmployeeReview, options: RenderOptions): string {
   const pageHtml = renderEmployeePage(employee, options);
   return wrapWithDocumentTemplate(`<div class="report-page">${pageHtml}</div>`);
-} 
+}

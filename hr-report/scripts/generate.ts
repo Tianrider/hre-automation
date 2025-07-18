@@ -11,7 +11,9 @@ const srcDir = path.resolve(__dirname, '../src');
 
 // Import our modules using absolute paths
 const { validateEmployeeReviewsSafe } = require(path.join(srcDir, 'utils/validation'));
-const { renderHtmlForEmployees, renderEmployeeDocument } = require(path.join(srcDir, 'utils/serverRenderer'));
+const { renderHtmlForEmployees, renderEmployeeDocument } = require(
+  path.join(srcDir, 'utils/serverRenderer')
+);
 
 interface CLIOptions {
   input: string;
@@ -20,10 +22,12 @@ interface CLIOptions {
 }
 
 function formatZodError(error: any): string {
-  return error.issues.map((issue: any) => {
-    const path = issue.path.length > 0 ? `at ${issue.path.join('.')}` : '';
-    return `- ${issue.message} ${path}`;
-  }).join('\n');
+  return error.issues
+    .map((issue: any) => {
+      const path = issue.path.length > 0 ? `at ${issue.path.join('.')}` : '';
+      return `- ${issue.message} ${path}`;
+    })
+    .join('\n');
 }
 
 const program = new Command();
@@ -86,7 +90,12 @@ program
         await page.setContent(employeeHtml, { waitUntil: 'networkidle0' });
         const filename = `${slugify(employee.name)}_${period}.pdf`;
         const pdfPath = path.join(outDir, filename);
-        await page.pdf({ path: pdfPath, format: 'A4', printBackground: true });
+        await page.pdf({
+          path: pdfPath,
+          format: 'A4',
+          printBackground: true,
+          quality: 80,
+        });
         await page.close();
         console.log(`Generated PDF: ${pdfPath}`);
       }
@@ -104,18 +113,20 @@ program
           console.log(`Created ZIP archive: ${zipPath} (${archive.pointer()} total bytes)`);
           // Optionally, clean up individual PDFs after zipping
           fs.readdirSync(outDir)
-            .filter(f => f.endsWith('.pdf') && f.includes(`_${period}.pdf`))
-            .forEach(f => fs.unlinkSync(path.join(outDir, f)));
+            .filter((f) => f.endsWith('.pdf') && f.includes(`_${period}.pdf`))
+            .forEach((f) => fs.unlinkSync(path.join(outDir, f)));
           resolve();
         });
-        archive.on('error', function(err){ reject(err); });
+        archive.on('error', function (err) {
+          reject(err);
+        });
       });
 
       archive.pipe(output);
       // Add all PDFs for this period
       fs.readdirSync(outDir)
-        .filter(f => f.endsWith('.pdf') && f.includes(`_${period}.pdf`))
-        .forEach(f => {
+        .filter((f) => f.endsWith('.pdf') && f.includes(`_${period}.pdf`))
+        .forEach((f) => {
           archive.file(path.join(outDir, f), { name: f });
         });
       await archive.finalize();
@@ -128,9 +139,8 @@ program
       console.log('CLI Options:', {
         input: path.resolve(options.input),
         period: options.period,
-        outDir
+        outDir,
       });
-
     } catch (error) {
       console.error('Error:', error instanceof Error ? error.message : String(error));
       process.exit(1);
@@ -151,7 +161,15 @@ function slugify(str) {
  * Generates PDFs for each employee and returns a Promise that resolves to the ZIP file path.
  * Used by both CLI and backend API.
  */
-async function generateReportsZip({ inputData, period, outDir }: { inputData: any, period: string, outDir: string }) {
+async function generateReportsZip({
+  inputData,
+  period,
+  outDir,
+}: {
+  inputData: any;
+  period: string;
+  outDir: string;
+}) {
   // Validate employee reviews data
   const validationResult = validateEmployeeReviewsSafe(inputData);
   if (!validationResult.success) {
@@ -182,7 +200,12 @@ async function generateReportsZip({ inputData, period, outDir }: { inputData: an
     await page.setContent(employeeHtml, { waitUntil: 'networkidle0' });
     const filename = `${slugify(employee.name)}_${period}.pdf`;
     const pdfPath = path.join(outDir, filename);
-    await page.pdf({ path: pdfPath, format: 'A4', printBackground: true });
+    await page.pdf({
+      path: pdfPath,
+      format: 'A4',
+      printBackground: true,
+      quality: 80,
+    });
     await page.close();
   }
   await browser.close();
@@ -198,18 +221,20 @@ async function generateReportsZip({ inputData, period, outDir }: { inputData: an
     output.on('close', function () {
       // Clean up individual PDFs after zipping
       fs.readdirSync(outDir)
-        .filter(f => f.endsWith('.pdf') && f.includes(`_${period}.pdf`))
-        .forEach(f => fs.unlinkSync(path.join(outDir, f)));
+        .filter((f) => f.endsWith('.pdf') && f.includes(`_${period}.pdf`))
+        .forEach((f) => fs.unlinkSync(path.join(outDir, f)));
       resolve();
     });
-    archive.on('error', function(err){ reject(err); });
+    archive.on('error', function (err) {
+      reject(err);
+    });
   });
 
   archive.pipe(output);
   // Add all PDFs for this period
   fs.readdirSync(outDir)
-    .filter(f => f.endsWith('.pdf') && f.includes(`_${period}.pdf`))
-    .forEach(f => {
+    .filter((f) => f.endsWith('.pdf') && f.includes(`_${period}.pdf`))
+    .forEach((f) => {
       archive.file(path.join(outDir, f), { name: f });
     });
   await archive.finalize();
@@ -219,4 +244,4 @@ async function generateReportsZip({ inputData, period, outDir }: { inputData: an
   return zipPath;
 }
 
-module.exports.generateReportsZip = generateReportsZip; 
+module.exports.generateReportsZip = generateReportsZip;

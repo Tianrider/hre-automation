@@ -16,10 +16,12 @@
     "@testing-library/react": "^16.3.0",
     "@types/file-saver": "^2.0.7",
     "@types/jest": "^30.0.0",
+    "@types/sharp": "^0.31.1",
     "pdf-poppler": "^0.2.1",
     "pixelmatch": "^7.1.0",
     "pngjs": "^7.0.0",
     "puppeteer": "^24.11.2",
-    "semantic-release": "^24.2.6"
+    "semantic-release": "^24.2.6",
+    "sharp": "^0.34.2"
   }
 }

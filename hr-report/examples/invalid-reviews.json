@@ -1,14 +1,50 @@
 [
   {
-    "name": "",
+    "name": "Missing Ratings",
+    "finalRating": 4.0,
+    "comment": ["This record is missing the ratings object."],
+    "divisi": "Uncategorized"
+  },
+  {
+    "name": "John Doe",
     "ratings": {
-      "tanggungJawab": 7,
+      "tanggungJawab": "five",
       "kerjaSama": 5,
-      "komunikasi": 4,
-      "pekaDanInisiatif": 4,
-      "kedekatan": 0,
+      "komunikasi": 5,
+      "pekaDanInisiatif": 5,
+      "kedekatan": 5,
       "profesional": 5
     },
-    "comment": []
+    "finalRating": 5,
+    "comment": ["Rating for tanggungJawab is not a number."],
+    "divisi": "Data Entry"
+  },
+  {
+    "name": "Jane Smith",
+    "ratings": {
+      "tanggungJawab": 5,
+      "kerjaSama": 5,
+      "komunikasi": 5,
+      "pekaDanInisiatif": 5,
+      "kedekatan": 5,
+      "profesional": 5
+    },
+    "finalRating": "high",
+    "comment": ["Final rating is not a number."],
+    "divisi": "Data Entry"
+  },
+  {
+    "name": "No Comments",
+    "ratings": {
+      "tanggungJawab": 5,
+      "kerjaSama": 5,
+      "komunikasi": 5,
+      "pekaDanInisiatif": 5,
+      "kedekatan": 5,
+      "profesional": 5
+    },
+    "finalRating": 5,
+    "comment": [],
+    "divisi": "Uncategorized"
   }
-] 
+]

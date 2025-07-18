@@ -22,9 +22,9 @@ app.post('/generate', upload.single('file'), async (req, res) => {
     const inputData = JSON.parse(fs.readFileSync(inputPath, 'utf-8'));
     const outDir = path.resolve('server-output');
     const zipPath = await generateReportsZip({ inputData, period, outDir });
-    res.download(zipPath, err => {
+    res.download(zipPath, (err) => {
       fs.unlinkSync(inputPath); // Clean up uploaded file
-      fs.unlinkSync(zipPath);   // Clean up zip after sending
+      fs.unlinkSync(zipPath); // Clean up zip after sending
     });
   } catch (err) {
     res.status(500).json({ error: err.message || 'Internal server error' });
@@ -33,4 +33,4 @@ app.post('/generate', upload.single('file'), async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
-}); 
+});
